@@ -276,17 +276,10 @@ module.exports = function(/*String*/input) {
             var entry = new ZipEntry();
             entry.entryName = entryName;
             entry.comment = comment || "";
-
-            if (!attr) {
-                if (entry.isDirectory) {
-                    attr = (040755 << 16) | 0x10; // (permissions drwxr-xr-x) + (MS-DOS directory flag)
-                } else {
-                    attr = 0644 << 16; // permissions -r-wr--r--
-                }
+            entry.attr = attr || 438; //0666;
+            if (entry.isDirectory && content.length) {
+               // throw Utils.Errors.DIRECTORY_CONTENT_ERROR;
             }
-
-            entry.attr = attr;
-
             entry.setData(content);
             _zip.setEntry(entry);
         },
